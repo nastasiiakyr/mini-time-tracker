@@ -1,0 +1,19 @@
+// Settings for local database with SQLite
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model TimeEntry {
+  id          Int      @id @default(autoincrement())
+  date        DateTime
+  project     String
+  hours       Float
+  description String
+  createdAt   DateTime @default(now())
+}
