@@ -13,6 +13,7 @@ export default function TimeEntryForm({
   const [hours, setHours] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
+  const today = new Date().toISOString().split("T")[0];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,8 +50,9 @@ export default function TimeEntryForm({
         <input
           type="date"
           value={date}
+          max={today}
           onChange={(e) => setDate(e.target.value)}
-          className="border p-2 rounded w-full"
+          className="w-full rounded-md border px-3 py-2"
         />
       </div>
 
@@ -72,9 +74,11 @@ export default function TimeEntryForm({
         <label className="block mb-1 font-medium">Hours</label>
         <input
           type="number"
+          step="0.25"
+          placeholder="Ex. 1.5"
           value={hours}
           onChange={(e) => setHours(e.target.value)}
-          min={0}
+          min={0.25}
           max={24}
           className="border p-2 rounded w-full"
         />
