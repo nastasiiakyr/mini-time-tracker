@@ -3,6 +3,7 @@ import prisma from "../prisma";
 
 const router = Router();
 
+// POST /time-entries
 router.post("/", async (req, res) => {
   try {
     const { date, project, hours, description } = req.body;
@@ -55,6 +56,35 @@ router.post("/", async (req, res) => {
     });
 
     res.status(201).json(newEntry);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// GET /time-entries
+router.get("/", async (req, res) => {
+  try {
+    // Get all entries
+    const entries = await prisma.timeEntry.findMany({
+      orderBy: { date: "asc" },
+    });
+
+    // Group by dates
+    const grouped: Record<string, any> = {};
+    let grandTotal = 0;
+
+    entries.forEach((entry) => {
+      const dateKey = entry.date.toISOString().split("T")[0];
+      if (!grouped[dateKey]) {
+        grouped[dateKey] = { entries: [], total: 0 };
+      }
+      grouped[dateKey].entries.push(entry);
+      grouped[dateKey].total += entry.hours;
+      grandTotal += entry.hours;
+    });
+
+    res.json({ groupedEntries: grouped, grandTotal });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
