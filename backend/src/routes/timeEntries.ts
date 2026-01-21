@@ -65,6 +65,7 @@ router.post("/", async (req, res) => {
 // GET /time-entries
 router.get("/", async (req, res) => {
   try {
+    console.log("GET /time-entries called");
     // Get all entries
     const entries = await prisma.timeEntry.findMany({
       orderBy: { date: "asc" },
