@@ -10,7 +10,6 @@ app.use(cors());
 app.use(express.json());
 
 // Use the time entries router for handling /time-entries routes
-console.log("Connecting timeEntriesRouter...");
 app.use("/time-entries", timeEntriesRouter);
 
 // Health check endpoint
